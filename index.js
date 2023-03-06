@@ -5,43 +5,40 @@ const url = require('url');
 http.createServer( function (req, res) {
 
 	let filename = '';
+	let page;
+
+	function servePage(file, statusCode) {
+		fs.readFile(filename, function(err, data) {
+			res.writeHead(statusCode, {'Content-Type':'text/html'});
+			res.write(data);
+			return res.end();
+		})
+	};
 
 	switch (req.url) {
 
 		case '/':
 			filename = './index.html';
-			fs.readFile(filename, function(err, data) {
-				res.writeHead(200, {'Content-Type':'text/html'});
-				res.write(data);
-				return res.end();
-			});
+			page = servePage(filename, 200);
+			return page;
 			break;
 
 		case '/about':
 			filename = './about.html';
-			fs.readFile(filename, function(err, data) {
-				res.writeHead(200, {'Content-Type':'text/html'});
-				res.write(data);
-				return res.end();
-			});
+			page = servePage(filename, 200);
+			return page;
 			break;
 
 		case '/contact-me':
 			filename = './contact-me.html';
-			fs.readFile(filename, function(err, data) {
-				res.writeHead(200, {'Content-Type':'text/html'});
-				res.write(data);
-				return res.end();
-			});
+			page = servePage(filename, 200);
+			return page;
 			break;
 
 		default:
 			filename = './404.html';
-			fs.readFile(filename, function(err, data) {
-				res.writeHead(404, {'Content-Type':'text/html'});
-				res.write(data);
-				return res.end();
-			});
+			page = servePage(filename, 404);
+			return page;
 	}
 }).listen(8080, () => {
 	console.log('Listening on http://localhost:8080')
